@@ -1,0 +1,44 @@
+.m-left {
+    margin-left: 10px;
+}
+.input-wrapper {
+    padding: 10px 0;
+}
+.table {
+    border: 1px solid black;
+    margin-bottom: 15px;
+}
+
+.m-top, table {
+    margin-top: 10px;
+}
+
+th, td {
+    padding: 8px;
+    border: 1px solid black;
+}
+
+.between {
+    display: flex;
+    justify-content: space-between;
+}
+
+.d-none {
+    display: none;
+}
+
+.lbl-button {
+    padding: 10px;
+    border-radius: 10px;
+    color: white;
+    background-color: black;
+}
+
+.lbl-button:hover {
+    cursor: pointer;
+}
+
+.img-preview {
+    border: 1px solid black;
+}
+
