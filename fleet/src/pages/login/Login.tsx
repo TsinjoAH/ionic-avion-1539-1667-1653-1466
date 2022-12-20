@@ -25,8 +25,8 @@ function Login() {
     const [presentAlert] = useIonAlert();
 
     const [data, updateData] = React.useState({
-        login: '',
-        password: ''
+        login: 'admin',
+        password: 'admin'
     });
 
     const [redirect, setRedirect] = React.useState(false);
