@@ -28,23 +28,21 @@ export const getPlanesExpiredIn = (month: number, set: (Planes: Plane[]) => void
         .catch(error => console.log(error));
 }
 
-export const getPlanes = (success: (list: Plane[])=> any) => {
-    let Planes = localStorage.getItem("planes")
-    if (Planes == null) {
-        refreshPlanes(success);
+export const getPlanes = (success: (list: Plane[]) => any) => {
+    let planes = localStorage.getItem("planes")
+    if (planes == null) {
+        refreshPlanes().then((data: Plane[]) => {
+            success(data)
+        });
+        return;
     }
-    success(JSON.parse(Planes??"[]") as Plane[]);
+    success(JSON.parse(planes??"[]") as Plane[])
 }
 
-export const refreshPlanes = (success?: (list: Plane[])=> any) => {
-    http.get(baseUrl("planes"))
-        .then((res) => {
-            localStorage.setItem("planes", JSON.stringify(res.data.data))
-            if (success) {
-                success(res.data.data as Plane[])
-            }
-        })
-        .catch((err) => console.log(err));
+export const refreshPlanes = async () => {
+    let res = await http.get(baseUrl("planes"));
+    localStorage.setItem("planes", JSON.stringify(res.data.data))
+    return res.data.data as Plane[]
 }
 
 export const getPlane = (id:number, set: (v: Plane) => any) => {

@@ -19,9 +19,10 @@ const Home: () => JSX.Element = () => {
     useIonViewWillEnter(() => {
         if (!localStorage.getItem("planes")) {
             modal.current?.present().then(() => {
-                getPlanes((list) => {
-                    modal.current?.dismiss();
-                    setPlanes(list);
+                getPlanes((data) =>  {
+                    modal.current?.dismiss().then(() => {
+                        setPlanes(data);
+                    })
                 });
             });
         }
@@ -31,8 +32,8 @@ const Home: () => JSX.Element = () => {
     });
 
     const refresh = (e: CustomEvent) => {
-        refreshPlanes((list: Plane[]) => {
-            setPlanes(list);
+        refreshPlanes().then((data) => {
+            setPlanes(data);
             e.detail.complete();
         });
     }
