@@ -16,11 +16,13 @@ import { useParams } from 'react-router';
 import {getPlane, Plane, refreshPlanes, updateImg} from "../../../data/plane.service";
 import "./PlaneView.css";
 import {OverlayEventDetail} from "@ionic/react/dist/types/components/react-component-lib/interfaces";
+import SpinnerProgress from "../../../components/spinner/SpinnerProgress";
 
 function ViewPlane() {
 
     const [plane, setPlane] = useState<Plane>();
     const [preview, setPreview] = useState<any>();
+    const modalLoading = useRef<HTMLIonModalElement>(null);
     const [presentAlert] = useIonAlert();
     const params = useParams<{ id: string }>();
     const modal = useRef<HTMLIonModalElement>(null);
@@ -35,12 +37,17 @@ function ViewPlane() {
     }
 
     const confirm = () => {
-        updateImg(plane?.id, preview)
-        .then((res) => {
-            setPlane(res?.data.data as Plane)
-            refreshPlanes();
+        modalLoading.current?.present().then(() => {
+            updateImg(plane?.id, preview)
+            .then((res) => {
+                modalLoading.current?.dismiss().then(() => {
+                    setPlane(res?.data.data as Plane)
+                    modal.current?.dismiss().then(() => {
+                        refreshPlanes();
+                    });
+                });
+            })
         })
-        modal.current?.dismiss();
     }
 
     function onWillDismiss(ev: CustomEvent<OverlayEventDetail>) {
@@ -118,6 +125,9 @@ function ViewPlane() {
                                             </IonToolbar>
                                         </IonHeader>
                                         <IonContent className="ion-padding">
+                                            <IonModal ref={modalLoading} className="modal" >
+                                                <SpinnerProgress className="vertical-center" />
+                                            </IonModal>
                                             <br/>
                                             <label htmlFor="input-file" className="lbl-button" >Selectionnez un image</label>
                                             <input id="input-file" type="file" className="d-none" onChange={setImage} />
